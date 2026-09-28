@@ -1,10 +1,82 @@
-# Lab3
+# EE538 Lab 3
 
-Le Duong
-Student ID: 8422234186
-email: lnduong@usc.edu
+Name: Le Duong  
+Student ID: 8422234186  
+Email: lnduong@usc.edu
+
+## Program Summary
+
+`matrix.cpp` defines a `Matrix` class that stores a private 10 by 10 integer
+array, reads two matrices, adds them without changing either operand, and prints
+their sum. `people.cpp` defines an abstract `Person` base class and the publicly
+derived `Student` and `Teacher` classes, then uses virtual calls through
+`Person*` pointers to print each person's information and introduction in input
+order.
+
+## Commands
+Based on my files names
+```
+g++ -std=c++17 -Wall -Wextra -pedantic 8422234186matrix.cpp -o matrix
+g++ -std=c++17 -Wall -Wextra -pedantic 8422234186people.cpp -o people
+```
+
+
+## Non-Working Parts
+
+None known.
+
+## Q4 Explanations
+
+### 1. Encapsulation in `Matrix`
+
+Keeping the array private prevents outside code from directly changing the
+matrix representation, while the public methods provide controlled ways to
+read, add, and write matrices. `mat_add()` can access `other.value` because C++
+grants a class's member functions access to the private members of every object
+of that class. `main()` is not a `Matrix` member or friend, so it cannot access
+`value` directly.
+
+### 2. Changing `Student` to Private Inheritance
+
+With private inheritance, `Person`'s public members become private within
+`Student`, so unrelated code in `main()` could not call `s.getName()`. The
+conversion from `Student*` to `Person*` would also be inaccessible, so
+`Person* p = &s` would not compile in `main()`. These operations work with
+public inheritance because a `Student` is publicly usable as a `Person`.
+
+### 3. Abstract `Person` and Virtual `introduce()`
+
+A `Person*` can point to a concrete `Student` or `Teacher`, but `Person` cannot
+be instantiated because its pure virtual `displayInfo()` makes it abstract. If
+`introduce()` were not virtual in `Person`, a call through a `Person*` would be
+statically bound to `Person::introduce()`, even when the object was a `Student`
+or `Teacher`. Removing `override` alone would not select the base version; it is
+removing `virtual` from the base declaration that changes dispatch here.
+
+### 4. Constructor/Destructor Order and the Virtual Destructor
+
+When constructing a `Student`, the `Person` constructor runs first and the
+`Student` constructor runs second. Destruction happens in reverse order:
+`Student` is destroyed first, followed by `Person`. A virtual `Person`
+destructor is necessary so deleting a `Student` through a `Person*` invokes the
+complete derived-to-base destruction sequence instead of causing undefined
+behavior.
+
+## References Used
 
 I used ChatGPT to generate pseudo code for me to implement on each question. For Q1-3, I gave chatGPT the instruction of the lab and asks it give me the pseudo code, so the prompts are all the same (just me telling it to give the pseudo code after I give it the assignment descriptions and questions). 
+
+Q1 Response:
+```
+/*
+Q1 Pseudocode
+1. Construct matrix A and matrix B; the constructor fills every element with 0.
+2. Read 100 integers into A, followed by 100 integers into B.
+3. Create matrix sum by calling A.mat_add(B).
+4. In mat_add, use nested loops to add corresponding private elements.
+5. Write sum as 10 rows, placing one space between adjacent values.
+*/
+```
 
 Q2 Response:
 
@@ -17,7 +89,10 @@ Q2 Pseudocode
 4. Initialize the Person part and each derived class's data in constructor
    initialization lists.
 5. Override displayInfo in each derived class using the exact required format.
+```
 
+Q3 Response:
+```
 Q3 Pseudocode
 1. Read n, then repeat n times: read a role and its fields.
 2. Construct the matching Student or Teacher and store its address as Person*.
@@ -28,3 +103,136 @@ Q3 Pseudocode
    destruction safe.
 
 ```
+
+I also asked chatGPT how to use the iomanip library in order to output the output into a file. 
+
+Prompt:
+```
+Give me an example of how to implement iomanip
+```
+
+Reponse:
+```
+<iomanip> is a C++ standard library header that provides tools for formatting input and output. You do not implement it yourself—you include it and use its formatting functions with std::cout.
+
+#include <iostream>
+#include <iomanip>
+
+int main() {
+    double price = 12.5;
+
+    std::cout << std::fixed
+              << std::setprecision(2)
+              << price
+              << '\n';
+
+    return 0;
+}
+
+Output:
+12.50
+
+Here:
+- std::fixed uses ordinary decimal notation.
+- std::setprecision(2) displays exactly two digits after the decimal point.
+- The formatting is applied to values sent through std::cout afterward.
+Other common <iomanip> tools include:
+std::cout << std::setw(10) << 42;
+
+This prints 42 in a field that is 10 characters wide:
+        42
+
+You can also control the padding and alignment:
+std::cout << std::left
+          << std::setfill('-')
+          << std::setw(10)
+          << "Hello";
+
+Output:
+Hello-----
+
+An important distinction is that std::fixed and std::setprecision() continue affecting later floating-point output, while std::setw() only affects the next value printed.
+```
+
+I also asked it how to implement istream and ostream:
+
+prompt:
+```
+how to implement istream and ostream
+```
+
+Response:
+```
+std::istream and std::ostream are standard C++ classes, so you do not implement them yourself. You use them as function parameters when you want a function to work with different input or output sources.
+- std::istream represents an input stream.
+- std::ostream represents an output stream.
+- std::cin is an istream.
+- std::cout is an ostream.
+Here is a simple example using a Point class:
+#include <iostream>
+
+class Point {
+private:
+    int x;
+    int y;
+
+public:
+    Point() : x(0), y(0) {
+    }
+
+    void read(std::istream& in) {
+        in >> x >> y;
+    }
+
+    void write(std::ostream& out) const {
+        out << "(" << x << ", " << y << ")\n";
+    }
+};
+
+int main() {
+    Point point;
+
+    point.read(std::cin);
+    point.write(std::cout);
+
+    return 0;
+}
+
+If the input is:
+4 7
+
+the output is:
+(4, 7)
+
+Understanding std::istream& in
+void read(std::istream& in)
+
+This means:
+- std::istream is the type of input stream.
+- & means the stream is passed by reference instead of copied.
+- in is the local name used for that stream.
+Inside the function:
+in >> x >> y;
+
+When the function is called like this:
+point.read(std::cin);
+
+in refers to std::cin. Therefore, reading from in is the same as reading from std::cin.
+Understanding std::ostream& out
+void write(std::ostream& out) const
+
+This means:
+- std::ostream is the type of output stream.
+- & passes the stream by reference.
+- out is the local name of the stream.
+- The final const promises that write() will not modify the Point object.
+Inside the function:
+out << "(" << x << ", " << y << ")\n";
+
+When called like this:
+point.write(std::cout);
+
+out refers to std::cout.
+```
+
+
