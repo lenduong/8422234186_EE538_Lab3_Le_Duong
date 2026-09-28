@@ -9,7 +9,7 @@ Q1 Pseudocode
 
 #include <iostream>
 
-class Matrix {
+class Matrix{
 private:
     int value[10][10];
 
@@ -20,27 +20,27 @@ public:
     void write(std::ostream& out) const;
 };
 
-Matrix::Matrix() {
-    for (int row = 0; row < 10; ++row) {
-        for (int column = 0; column < 10; ++column) {
+Matrix::Matrix(){
+    for (int row = 0; row < 10; ++row){
+        for (int column = 0; column < 10; ++column){
             value[row][column] = 0;
         }
     }
 }
 
-void Matrix::read(std::istream& in) {
-    for (int row = 0; row < 10; ++row) {
-        for (int column = 0; column < 10; ++column) {
+void Matrix::read(std::istream& in){
+    for (int row = 0; row < 10; ++row){
+        for (int column = 0; column < 10; ++column){
             in >> value[row][column];
         }
     }
 }
 
-Matrix Matrix::mat_add(const Matrix& other) const {
+Matrix Matrix::mat_add(const Matrix& other) const{
     Matrix sum;
 
-    for (int row = 0; row < 10; ++row) {
-        for (int column = 0; column < 10; ++column) {
+    for (int row = 0; row < 10; ++row){
+        for (int column = 0; column < 10; ++column){
             sum.value[row][column] =
                 value[row][column] + other.value[row][column];
         }
@@ -49,10 +49,10 @@ Matrix Matrix::mat_add(const Matrix& other) const {
     return sum;
 }
 
-void Matrix::write(std::ostream& out) const {
-    for (int row = 0; row < 10; ++row) {
-        for (int column = 0; column < 10; ++column) {
-            if (column > 0) {
+void Matrix::write(std::ostream& out) const{
+    for (int row = 0; row < 10; ++row){
+        for (int column = 0; column < 10; ++column){
+            if (column > 0){
                 out << ' ';
             }
             out << value[row][column];
@@ -61,7 +61,7 @@ void Matrix::write(std::ostream& out) const {
     }
 }
 
-int main() {
+int main(){
     Matrix matrixA;
     Matrix matrixB;
 

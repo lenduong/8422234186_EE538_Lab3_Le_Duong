@@ -23,66 +23,66 @@ Q3 Pseudocode
 #include <string>
 #include <vector>
 
-class Person {
-private:
-    std::string name;
-    int age;
+class Person{
+    private:
+        std::string name;
+        int age;
 
-public:
-    Person(const std::string& name, int age);
-    const std::string& getName() const;
-    int getAge() const;
-    virtual void displayInfo(std::ostream& out) const = 0;
-    virtual void introduce(std::ostream& out) const;
-    virtual ~Person() = default;
+    public:
+        Person(const std::string& name, int age);
+        const std::string& getName() const;
+        int getAge() const;
+        virtual void displayInfo(std::ostream& out) const = 0;
+        virtual void introduce(std::ostream& out) const;
+        virtual ~Person() = default;
 };
 
-class Student : public Person {
-private:
-    std::string studentID;
-    double gpa;
+class Student : public Person{
+    private:
+        std::string studentID;
+        double gpa;
 
-public:
-    Student(const std::string& name, int age,
-            const std::string& studentID, double gpa);
-    void displayInfo(std::ostream& out) const override;
-    void introduce(std::ostream& out) const override;
+    public:
+        Student(const std::string& name, int age,
+                const std::string& studentID, double gpa);
+        void displayInfo(std::ostream& out) const override;
+        void introduce(std::ostream& out) const override;
 };
 
-class Teacher : public Person {
-private:
-    std::string subject;
-    int yearsOfExperience;
+class Teacher : public Person{
+    private:
+        std::string subject;
+        int yearsOfExperience;
 
-public:
-    Teacher(const std::string& name, int age,
-            const std::string& subject, int yearsOfExperience);
-    void displayInfo(std::ostream& out) const override;
-    void introduce(std::ostream& out) const override;
+    public:
+        Teacher(const std::string& name, int age,
+                const std::string& subject, int yearsOfExperience);
+        void displayInfo(std::ostream& out) const override;
+        void introduce(std::ostream& out) const override;
 };
 
 Person::Person(const std::string& name, int age)
-    : name(name), age(age) {
+    : name(name), age(age){
 }
 
-const std::string& Person::getName() const {
+const std::string& Person::getName() const{
     return name;
 }
 
-int Person::getAge() const {
+int Person::getAge() const{
     return age;
 }
 
-void Person::introduce(std::ostream& out) const {
+void Person::introduce(std::ostream& out) const{
     out << "I am a person. My name is " << getName() << ".\n";
 }
 
 Student::Student(const std::string& name, int age,
                  const std::string& studentID, double gpa)
-    : Person(name, age), studentID(studentID), gpa(gpa) {
+    : Person(name, age), studentID(studentID), gpa(gpa){
 }
 
-void Student::displayInfo(std::ostream& out) const {
+void Student::displayInfo(std::ostream& out) const{
     out << "Student: " << getName()
         << ", Age: " << getAge()
         << ", ID: " << studentID
@@ -90,7 +90,7 @@ void Student::displayInfo(std::ostream& out) const {
         << '\n';
 }
 
-void Student::introduce(std::ostream& out) const {
+void Student::introduce(std::ostream& out) const{
     out << "I am a student. My name is " << getName() << ".\n";
 }
 
@@ -98,40 +98,40 @@ Teacher::Teacher(const std::string& name, int age,
                  const std::string& subject, int yearsOfExperience)
     : Person(name, age),
       subject(subject),
-      yearsOfExperience(yearsOfExperience) {
+      yearsOfExperience(yearsOfExperience){
 }
 
-void Teacher::displayInfo(std::ostream& out) const {
+void Teacher::displayInfo(std::ostream& out) const{
     out << "Teacher: " << getName()
         << ", Age: " << getAge()
         << ", Subject: " << subject
         << ", Experience: " << yearsOfExperience << " years\n";
 }
 
-void Teacher::introduce(std::ostream& out) const {
+void Teacher::introduce(std::ostream& out) const{
     out << "I am a teacher. My name is " << getName() << ".\n";
 }
 
-int main() {
+int main(){
     int numberOfPeople;
     std::cin >> numberOfPeople;
 
     std::vector<Person*> people;
     people.reserve(numberOfPeople);
 
-    for (int index = 0; index < numberOfPeople; ++index) {
+    for (int index = 0; index < numberOfPeople; ++index){
         std::string role;
         std::string name;
         int age;
 
         std::cin >> role >> name >> age;
 
-        if (role == "Student") {
+        if (role == "Student"){
             std::string studentID;
             double gpa;
             std::cin >> studentID >> gpa;
             people.push_back(new Student(name, age, studentID, gpa));
-        } else {
+        } else{
             std::string subject;
             int yearsOfExperience;
             std::cin >> subject >> yearsOfExperience;
@@ -140,7 +140,7 @@ int main() {
         }
     }
 
-    for (Person* person : people) {
+    for (Person* person : people){
         person->displayInfo(std::cout);
         person->introduce(std::cout);
         delete person;
